@@ -6,11 +6,11 @@ from pathlib import Path
 
 app = FastAPI()
 
-app.mount(
-    "/static",
-    StaticFiles(directory=Path(__file__).parent.absolute() / "static"),
-    name="static",
-)
+#app.mount(
+#    "/static",
+#    StaticFiles(directory=Path(__file__).parent.absolute() / "static"),
+#    name="static",
+#)
 
 templates = Jinja2Templates(directory="templates")
 
