@@ -29,7 +29,7 @@ def spotify_test():
         else:
             pass # unknown
         elif request.method == 'GET':
-            return render_template("spotify-test.html")
+            return render_template("spotify-test.html", form=form)
 
 
 # @app.route("/spotify_test", methods=['GET','POST'])
