@@ -22,17 +22,17 @@ def about():
 def spotify_test():
     return render_template("spotify-test.html")
 
-#    if request.method == 'POST':
-#        if request.form['submit_button'] == 'Do Something':
+    if request.method == 'POST':
+        if request.form['submit_button'] == 'Do Something':
 #            flash('Do Something')
-#            pass # do something
-#        elif request.form['submit_button'] == 'Do Something Else':
+            pass # do something
+        elif request.form['submit_button'] == 'Do Something Else':
 #            flash('Do Something Else')
-#            pass # do something else
-#        else:
-#            pass # unknown
-#        elif request.method == 'GET':
-#            return render_template("spotify-test.html", form=form)
+            pass # do something else
+        else:
+            pass # unknown
+    elif request.method == 'GET':
+        return render_template("spotify-test.html", form=form)
 
 
 # @app.route("/spotify_test", methods=['GET','POST'])
