@@ -27,11 +27,15 @@ def spotify_test():
 
     if request.method == 'POST':
         if request.form['submit_button'] == 'Do Something':
-            print('Do Something', file=sys.stderr)
+            #print('Do Something', file=sys.stderr)
             #pass # do something
+            return redirect("https://www.google.com/")
+
         elif request.form['submit_button'] == 'Do Something Else':
-            print('Do Something Else', file=sys.stderr)
+            #print('Do Something Else', file=sys.stderr)
             #pass # do something else
+
+            return redirect("https://www.wikipedia.org/")
         else:
             pass # unknown
     elif request.method == 'GET':
