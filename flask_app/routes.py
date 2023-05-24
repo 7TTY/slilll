@@ -17,7 +17,7 @@ def index():
 def about():
     return render_template("index.html")
 
-@app.route("/spotify-test")
+@app.route("/spotifytest")
 def about():
     return render_template("index.html")
 
