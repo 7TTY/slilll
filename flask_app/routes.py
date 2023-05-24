@@ -148,7 +148,8 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('index'))
 
-@app.route("/spotify_test", methods=['GET','POST'])
+# @app.route("/spotify_test", methods=['GET','POST'])
+@app.route("/spotify_test")
 def spotify_test():
 #    if request.method == 'POST':
 #        if request.form['submit_button'] == 'Do Something':
@@ -161,4 +162,4 @@ def spotify_test():
 #            pass # unknown
 #    elif request.method == 'GET':
 #        return render_template('spotify_test.html', title='TESTING SPOTIFY API', form=form)
-    return render_template('spotify_test.html', title='TESTING SPOTIFY API', form=form)
+    return render_template('spotify_test.html')
