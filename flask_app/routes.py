@@ -17,19 +17,22 @@ def index():
 def about():
     return render_template("index.html")
 
-@app.route("/spotify-test", methods=['GET','POST'])
+#@app.route("/spotify-test", methods=['GET','POST'])
+@app.route("/spotify-test")
 def spotify_test():
-    if request.method == 'POST':
-        if request.form['submit_button'] == 'Do Something':
-            flash('Do Something')
-            # pass # do something
-        elif request.form['submit_button'] == 'Do Something Else':
-            flash('Do Something Else')
-            # pass # do something else
-        else:
-            pass # unknown
-        elif request.method == 'GET':
-            return render_template("spotify-test.html", form=form)
+    return render_template("spotify-test.html")
+
+#    if request.method == 'POST':
+#        if request.form['submit_button'] == 'Do Something':
+#            flash('Do Something')
+#            pass # do something
+#        elif request.form['submit_button'] == 'Do Something Else':
+#            flash('Do Something Else')
+#            pass # do something else
+#        else:
+#            pass # unknown
+#        elif request.method == 'GET':
+#            return render_template("spotify-test.html", form=form)
 
 
 # @app.route("/spotify_test", methods=['GET','POST'])
