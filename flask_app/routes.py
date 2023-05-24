@@ -150,14 +150,14 @@ def delete_post(post_id):
 
 @app.route("/spotify_test")
 def spotify_test():
-    if request.method == 'POST':
-        if request.form['submit_button'] == 'Do Something':
-            flash('Do Something')
-            # pass # do something
-        elif request.form['submit_button'] == 'Do Something Else':
-            flash('Do Something Else')
-            # pass # do something else
-        else:
-            pass # unknown
-    elif request.method == 'GET':
-        return render_template('spotify_test.html', title='TESTING SPOTIFY API', form=form)
+#    if request.method == 'POST':
+#        if request.form['submit_button'] == 'Do Something':
+#            flash('Do Something')
+#            # pass # do something
+#        elif request.form['submit_button'] == 'Do Something Else':
+#            flash('Do Something Else')
+#            # pass # do something else
+#        else:
+#            pass # unknown
+#    elif request.method == 'GET':
+    return render_template('spotify_test.html', title='TESTING SPOTIFY API', form=form)
