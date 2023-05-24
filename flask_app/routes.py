@@ -6,6 +6,9 @@ from flask_app import app, db
 from flask_app.models import User, Post
 from flask_app.forms import PostForm
 
+import sys
+
+
 @app.route("/")
 def index():
     db.create_all()
@@ -24,10 +27,10 @@ def spotify_test():
 
     if request.method == 'POST':
         if request.form['submit_button'] == 'Do Something':
-            flash('Do Something')
+            print('Do Something', file=sys.stderr)
             #pass # do something
         elif request.form['submit_button'] == 'Do Something Else':
-            flash('Do Something Else')
+            print('Do Something Else', file=sys.stderr)
             #pass # do something else
         else:
             pass # unknown
