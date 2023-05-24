@@ -30,14 +30,12 @@
   </header>
 
   <div class="container content">
-  
+    {% include 'includes/_messages.html' %}
+    
     <!-- Loads and renders content blocks of a template -->
     {% block content %} {% endblock %}
 
   </div>
-
-  <div>
-    <a class="" href="{{ url_for('static', filename='styles/footer.css') }}"
 
   <!-- Import navbar component -->
   {% include 'includes/_footer.html' %}
