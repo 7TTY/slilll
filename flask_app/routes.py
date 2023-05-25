@@ -23,7 +23,7 @@ def about():
 @app.route("/spotify-test", methods=['GET','POST'])
 #@app.route("/spotify-test")
 def spotify_test():
-    return render_template("spotify-test.html")
+#    return render_template("spotify-test.html")
 
     if request.method == 'POST':
         if request.form['submit_button'] == 'Do Something':
