@@ -26,16 +26,16 @@ def spotify_test():
         #print('getting spotify-test.html', file=sys.stderr)
         return render_template("spotify-test.html")
     else:
-        if request.form['submit_button'] == 'Go To Google':
+        if request.form['submit_button'] == 'Foo':
             #print('Go To Google', file=sys.stderr)
             #pass # do something
-            return redirect("https://www.google.com/")
+            return redirect(url_for("foo"))
 
-        elif request.form['submit_button'] == 'Go To Wikipedia':
+        elif request.form['submit_button'] == 'Bar':
             #print('Go To Wikipedia', file=sys.stderr)
             #pass # do something else
 
-            return redirect("https://www.wikipedia.org/")
+            return redirect(url_for("bar"))
         else:
             pass # unknown
 
