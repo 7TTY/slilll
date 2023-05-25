@@ -23,6 +23,7 @@ def about():
 @app.route("/spotify-test", methods=['GET','POST'])
 def spotify_test():
     if request.method == 'GET':
+        print('getting spotify-test.html', file=sys.stderr)
         return render_template("spotify-test.html")
     else:
         if request.form['submit_button'] == 'Go To Google':
