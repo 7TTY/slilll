@@ -20,43 +20,31 @@ def index():
 def about():
     return render_template("index.html")
 
-@app.route("/spotify-test", methods=['GET','POST'])
-#@app.route("/spotify-test")
-def spotify_test():
-#    return render_template("spotify-test.html")
-
-    if request.method == 'POST':
-        if request.form['submit_button'] == 'Do Something':
+#@app.route("/spotify-test", methods=['GET','POST'])
+#def spotify_test():
+#    if request.method == 'GET':
+#        return render_template("spotify-test.html", form=form)
+#    else:
+#        if request.form['submit_button'] == 'Go To Google':
             #print('Do Something', file=sys.stderr)
             #pass # do something
-            return redirect("https://www.google.com/")
+#            return redirect("https://www.google.com/")
 
-        elif request.form['submit_button'] == 'Do Something Else':
+#        elif request.form['submit_button'] == 'Go To Wikipedia':
             #print('Do Something Else', file=sys.stderr)
             #pass # do something else
 
-            return redirect("https://www.wikipedia.org/")
-        else:
-            pass # unknown
-    elif request.method == 'GET':
-        return render_template("spotify-test.html", form=form)
-
-
-# @app.route("/spotify_test", methods=['GET','POST'])
-#@app.route("/spotify_test")
-#def spotify_test():
-#    if request.method == 'POST':
-#        if request.form['submit_button'] == 'Do Something':
-#            flash('Do Something')
-#            # pass # do something
-#        elif request.form['submit_button'] == 'Do Something Else':
-#            flash('Do Something Else')
-#            # pass # do something else
+#            return redirect("https://www.wikipedia.org/")
 #        else:
 #            pass # unknown
-#    elif request.method == 'GET':
-#        return render_template('spotify_test.html', title='TESTING SPOTIFY API', form=form)
-#    return render_template('spotify_test.html')
+
+
+@app.route("/spotify-test")
+def spotify_test():
+    return render_template('spotify_test.html')
+
+
+
 
 
 
