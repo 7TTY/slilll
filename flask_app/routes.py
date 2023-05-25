@@ -41,7 +41,7 @@ def about():
 
 @app.route("/spotify-test")
 def spotify_test():
-    return render_template('spotify_test.html')
+    return render_template('spotify-test.html')
 
 
 
