@@ -23,18 +23,18 @@ def about():
 @app.route("/spotify-test", methods=['GET','POST'])
 def spotify_test():
     if request.method == 'GET':
-        return render_template("spotify-test.html", form=form)
+        return render_template("spotify-test.html")
     else:
         if request.form['submit_button'] == 'Go To Google':
-            #print('Do Something', file=sys.stderr)
-            #pass # do something
-            return redirect("https://www.google.com/")
+            print('Go To Google', file=sys.stderr)
+            pass # do something
+            #return redirect("https://www.google.com/")
 
         elif request.form['submit_button'] == 'Go To Wikipedia':
-            #print('Do Something Else', file=sys.stderr)
-            #pass # do something else
+            print('Go To Wikipedia', file=sys.stderr)
+            pass # do something else
 
-            return redirect("https://www.wikipedia.org/")
+            #return redirect("https://www.wikipedia.org/")
         else:
             pass # unknown
 
