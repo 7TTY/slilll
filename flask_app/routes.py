@@ -44,6 +44,15 @@ def spotify_test():
 #def spotify_test():
 #    return render_template('spotify-test.html')
 
+@app.route("/foo")
+def foo():
+    return "FOO"
+
+@app.route("/bar")
+def bar():
+    return "BAR"
+
+
 
 
 
