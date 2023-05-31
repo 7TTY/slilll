@@ -15,7 +15,8 @@ def about():
 
 @app.route("/foo")
 def foo():
-    return "FOO"
+#    return "FOO"
+	return redirect("https://www.google.com")
 
 @app.route("/bar")
 def bar():
