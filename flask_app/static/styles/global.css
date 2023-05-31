@@ -1,15 +1,13 @@
-body {
-  color: #a83e60;
-}
 
 .navbar {
   background-color: #1acdd6;
 }
 
 .content {
-  margin-top: 100px;
-  margin-bottom: 100px;
-  background-color: #22ab50;
+  color: #a83e60;
+  background-color: #12b88c;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
