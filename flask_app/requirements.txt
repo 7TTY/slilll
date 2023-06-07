@@ -3,5 +3,5 @@ flask-sqlalchemy
 sqlalchemy
 flask-security
 flask-wtf
-gunicorn3
+gunicorn
 wheel
