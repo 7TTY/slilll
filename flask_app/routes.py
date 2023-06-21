@@ -63,14 +63,14 @@ API_VERSION = "v1"
 SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
 
 # Server-side Parameters
-CLIENT_SIDE_URL = "http://127.0.0.1"
+#CLIENT_SIDE_URL = "http://127.0.0.1"
 #change port
-PORT = 8000
+#PORT = 8000
 #removed /q
-REDIRECT_URI = "{}:{}/spotify/callback".format(CLIENT_SIDE_URL, PORT)
+#REDIRECT_URI = "{}:{}/spotify/callback".format(CLIENT_SIDE_URL, PORT)
 
 # test out public ip /callback -- register as redirect uri 
-#REDIRECT_URI = "http://173.230.144.62/callback"
+REDIRECT_URI = "http://173.230.144.62/spotify/callback"
 
 SCOPE = "playlist-modify-public playlist-modify-private"
 STATE = ""
