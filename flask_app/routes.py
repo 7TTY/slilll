@@ -46,8 +46,11 @@ def bar():
 # redirect_uri = http://127.0.0.1:8080/callback
 
 #  Client Keys
-CLIENT_ID = ""
-CLIENT_SECRET = ""
+
+from config import Config
+
+CLIENT_ID = Config.client_id
+CLIENT_SECRET = Config.client_secret
 
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
