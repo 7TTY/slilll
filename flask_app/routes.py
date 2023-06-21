@@ -81,14 +81,14 @@ auth_query_parameters = {
 }
 
 @app.route("/spotify/authorize")
-def index():
+def spotify_authorize():
     # Auth Step 1: Authorization
     url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     return redirect(auth_url)
 
 @app.route("/spotify/callback")
-def callback():
+def spotify_callback():
     # Auth Step 4: Requests refresh and access tokens
     auth_token = request.args['code']
     code_payload = {
