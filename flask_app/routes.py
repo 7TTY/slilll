@@ -47,10 +47,11 @@ def bar():
 
 #  Client Keys
 
-from config import Config
+from config.py import Config
 
-CLIENT_ID = Config.client_id
-CLIENT_SECRET = Config.client_secret
+config = Config()
+CLIENT_ID = config.client_id
+CLIENT_SECRET = config.client_secret
 
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
