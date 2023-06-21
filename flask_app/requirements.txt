@@ -6,3 +6,4 @@ flask-wtf
 gunicorn
 wheel
 requests
+pyyaml
