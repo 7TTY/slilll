@@ -48,7 +48,7 @@ def bar():
 #  Client Keys
 import yaml
 
-with open('config.yaml', 'r') as file:
+with open('/home/utterpop/slilll/flask_app/config.yaml', 'r') as file:
 	client_keys = yaml.safe_load(file)
 
 
