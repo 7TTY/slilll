@@ -5,3 +5,4 @@ flask-security
 flask-wtf
 gunicorn
 wheel
+requests
