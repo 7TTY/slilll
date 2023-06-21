@@ -67,7 +67,7 @@ CLIENT_SIDE_URL = "http://127.0.0.1"
 #change port
 PORT = 8000
 #removed /q
-REDIRECT_URI = "{}:{}/callback".format(CLIENT_SIDE_URL, PORT)
+REDIRECT_URI = "{}:{}/spotify/callback".format(CLIENT_SIDE_URL, PORT)
 
 # test out public ip /callback -- register as redirect uri 
 #REDIRECT_URI = "http://173.230.144.62/callback"
