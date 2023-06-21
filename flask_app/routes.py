@@ -46,12 +46,14 @@ def bar():
 # redirect_uri = http://127.0.0.1:8080/callback
 
 #  Client Keys
+import yaml
 
-from config.py import Config
+with open('config.yaml', 'r') as file
+	client_keys = yaml.safe_load(file)
 
-config = Config()
-CLIENT_ID = config.client_id
-CLIENT_SECRET = config.client_secret
+
+CLIENT_ID = client_keys['client_keys']['client_id']
+CLIENT_SECRET = client_keys['client_keys']['client_id']
 
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
