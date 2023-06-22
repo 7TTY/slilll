@@ -106,11 +106,9 @@ def spotify_callback():
     # Auth Step 4: Requests refresh and access tokens
     code = request.args['code']
 
-#    base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
-    authorization_test = "{}:{}".format(CLIENT_ID, CLIENT_SECRET)
+    base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
     headers = {
-#        'Authorization': "Basic {}".format(base64encoded.decode()),
-        'Authorization': "Basic {}".format(authorization_test),
+        'Authorization': "Basic {}".format(base64encoded.decode()),
 
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
