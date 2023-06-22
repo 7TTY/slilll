@@ -122,7 +122,9 @@ def spotify_callback():
         return str([pr['access_token'], pr['refresh_token'], pr['expires_in']])
     else:
 #        logging.error('getToken:' + str(post_response.status_code))
-        return "None"
+        error_message = "ERROR\n"
+        error_message += str(headers) + str(body)
+        return 
     # Auth Step 5: Tokens are Returned to Application
 #    print(post_request)
 #    response_data = json.loads(post_request.text)
