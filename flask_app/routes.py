@@ -92,15 +92,19 @@ def spotify_authorize():
         # "show_dialog": SHOW_DIALOG_str,
         "client_id": CLIENT_ID
     }
+    authorize_url = 'https://accounts.spotify.com/en/authorize?'
+    parameters = 'response_type=code&client_id=' + CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&scope=' + SCOPE
+    response = make_response(redirect(authorize_url + parameters))
 
-    url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
-    auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
-    return redirect(auth_url)
+    return response
+#    url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
+#    auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
+#    return redirect(auth_url)
 
 @app.route("/spotify/callback")
 def spotify_callback():
     # Auth Step 4: Requests refresh and access tokens
-    auth_token = request.args['code']
+    code = request.args['code']
 
     base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
     headers = {
@@ -109,7 +113,7 @@ def spotify_callback():
         'Content-Type': 'application/x-www-form-urlencoded'
     }
     body = {
-        "code": str(auth_token),
+        "code": str(code),
         "redirect_uri": REDIRECT_URI,
         "grant_type": "authorization_code",
     }
