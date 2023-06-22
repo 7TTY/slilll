@@ -128,7 +128,7 @@ def spotify_callback():
     else:
 #        logging.error('getToken:' + str(post_response.status_code))
         error_message = "ERROR\n"
-        error_message += str(headers) + str(body)
+#        error_message += str(headers) + str(body)
         return error_message
     # Auth Step 5: Tokens are Returned to Application
 #    print(post_request)
