@@ -47,6 +47,7 @@ def bar():
 
 #  Client Keys
 import yaml
+import base64
 
 with open('/home/utterpop/slilll/flask_app/config.yaml', 'r') as file:
 	client_keys = yaml.safe_load(file)
@@ -98,39 +99,50 @@ def spotify_authorize():
 def spotify_callback():
     # Auth Step 4: Requests refresh and access tokens
     auth_token = request.args['code']
-    code_payload = {
-        "grant_type": "authorization_code",
+
+    base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
+    headers = {
+        'Authorization': "Basic {}".format(base64encoded.decode()),
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    body = {
         "code": str(auth_token),
         "redirect_uri": REDIRECT_URI,
-        'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET,
+        "grant_type": "authorization_code",
     }
-    post_request = requests.post(SPOTIFY_TOKEN_URL, data=code_payload)
 
+
+    post_response = requests.post(SPOTIFY_TOKEN_URL, headers=headers, data=body)
+
+    if post_response.status_code == 200:
+        pr = post_response.json()
+        return str([pr['access_token'], pr['refresh_token'], pr['expires_in']])
+    else:
+#        logging.error('getToken:' + str(post_response.status_code))
+        return None
     # Auth Step 5: Tokens are Returned to Application
-    print(post_request)
-    response_data = json.loads(post_request.text)
-    access_token = response_data["access_token"]
-    refresh_token = response_data["refresh_token"]
-    token_type = response_data["token_type"]
-    expires_in = response_data["expires_in"]
+#    print(post_request)
+#    response_data = json.loads(post_request.text)
+#    access_token = response_data["access_token"]
+#    refresh_token = response_data["refresh_token"]
+#    token_type = response_data["token_type"]
+#    expires_in = response_data["expires_in"]
 
-    # Auth Step 6: Use the access token to access Spotify API
-    authorization_header = {"Authorization": "Bearer {}".format(access_token)}
 
     # Get profile data
-    user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
-    profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
-    profile_data = json.loads(profile_response.text)
+#    user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
+#    profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
+#    profile_data = json.loads(profile_response.text)
 
     # Get user playlist data
-    playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
-    playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
-    playlist_data = json.loads(playlists_response.text)
+#    playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
+#    playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
+#    playlist_data = json.loads(playlists_response.text)
 
     # Combine profile and playlist data to display
-    display_arr = [profile_data] + playlist_data["items"]
-    return render_template("index.html", sorted_array=display_arr)
+#    display_arr = [profile_data] + playlist_data["items"]
+#    return render_template("index.html", sorted_array=display_arr)
 
 
 #example Medium article
