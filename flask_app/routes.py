@@ -79,18 +79,20 @@ STATE = ""
 SHOW_DIALOG_bool = True
 SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
 
-auth_query_parameters = {
-    "response_type": "code",
-    "redirect_uri": REDIRECT_URI,
-    "scope": SCOPE,
-    # "state": STATE,
-    # "show_dialog": SHOW_DIALOG_str,
-    "client_id": CLIENT_ID
-}
 
 @app.route("/spotify/authorize")
 def spotify_authorize():
     # Auth Step 1: Authorization
+
+    auth_query_parameters = {
+        "response_type": "code",
+        "redirect_uri": REDIRECT_URI,
+        "scope": SCOPE,
+        # "state": STATE,
+        # "show_dialog": SHOW_DIALOG_str,
+        "client_id": CLIENT_ID
+    }
+
     url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     return redirect(auth_url)
@@ -120,7 +122,7 @@ def spotify_callback():
         return str([pr['access_token'], pr['refresh_token'], pr['expires_in']])
     else:
 #        logging.error('getToken:' + str(post_response.status_code))
-        return None
+        return "None"
     # Auth Step 5: Tokens are Returned to Application
 #    print(post_request)
 #    response_data = json.loads(post_request.text)
