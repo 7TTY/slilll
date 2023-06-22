@@ -108,8 +108,8 @@ def spotify_callback():
 
     base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
     headers = {
-#        'Authorization': "Basic {}".format(base64encoded.decode()),
-        'Authorization': "Basic {}".format(base64encoded),
+        'Authorization': "Basic {}".format(base64encoded.decode()),
+
         'Accept': 'application/json',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
