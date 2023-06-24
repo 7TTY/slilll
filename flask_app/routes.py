@@ -82,8 +82,8 @@ Session(app)
 
 INDEX_URI = '/spotify'
 
-@app.route('/spotify')
-def index():
+@app.route( INDEX_URI )
+def spotify_auth():
 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
