@@ -42,163 +42,110 @@ def bar():
 #
 #
 
-#change port
-# redirect_uri = http://127.0.0.1:8080/callback
+"""
+Prerequisites
 
-#  Client Keys
-import yaml
-import base64
+    pip3 install spotipy Flask Flask-Session
 
-with open('/home/utterpop/slilll/flask_app/config.yaml', 'r') as file:
-	client_keys = yaml.safe_load(file)
+    // from your [app settings](https://developer.spotify.com/dashboard/applications)
+    export SPOTIPY_CLIENT_ID=client_id_here
+    export SPOTIPY_CLIENT_SECRET=client_secret_here
+    export SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080' // must contain a port
+    // SPOTIPY_REDIRECT_URI must be added to your [app settings](https://developer.spotify.com/dashboard/applications)
+    OPTIONAL
+    // in development environment for debug output
+    export FLASK_ENV=development
+    // so that you can invoke the app outside of the file's directory include
+    export FLASK_APP=/path/to/spotipy/examples/app.py
 
+    // on Windows, use `SET` instead of `export`
 
-CLIENT_ID = client_keys['client_keys']['client_id']
-CLIENT_SECRET = client_keys['client_keys']['client_id']
+Run app.py
 
-# Spotify URLS
-SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
-SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
-SPOTIFY_API_BASE_URL = "https://api.spotify.com"
-API_VERSION = "v1"
-SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
+    python3 app.py OR python3 -m flask run
+    NOTE: If receiving "port already in use" error, try other ports: 5000, 8090, 8888, etc...
+        (will need to be updated in your Spotify app and SPOTIPY_REDIRECT_URI variable)
+"""
 
-# Server-side Parameters
-#CLIENT_SIDE_URL = "http://127.0.0.1"
-#change port
-#PORT = 8000
-#removed /q
-#REDIRECT_URI = "{}:{}/spotify/callback".format(CLIENT_SIDE_URL, PORT)
+# deployment redirect uri --> http://173.230.144.62/spotify
 
-# test out public ip /callback -- register as redirect uri 
-REDIRECT_URI = "http://173.230.144.62/spotify/callback"
+import os
+from flask import Flask, session, request, redirect
+from flask_session import Session
+import spotipy
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(64)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './.flask_session/'
+Session(app)
 
-SCOPE = "playlist-modify-public playlist-modify-private"
-STATE = ""
-SHOW_DIALOG_bool = True
-SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
+INDEX_URI = '/spotify'
 
+@app.route('/spotify')
+def index():
 
-@app.route("/spotify/authorize")
-def spotify_authorize():
-    # Auth Step 1: Authorization
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
+                                               cache_handler=cache_handler,
+                                               show_dialog=True)
 
-    auth_query_parameters = {
-        "response_type": "code",
-        "redirect_uri": REDIRECT_URI,
-        "scope": SCOPE,
-        # "state": STATE,
-        # "show_dialog": SHOW_DIALOG_str,
-        "client_id": CLIENT_ID
-    }
-    authorize_url = 'https://accounts.spotify.com/en/authorize?'
-    parameters = 'response_type=code&client_id=' + CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&scope=' + SCOPE
-    response = make_response(redirect(authorize_url + parameters))
+    if request.args.get("code"):
+        # Step 2. Being redirected from Spotify auth page
+        auth_manager.get_access_token(request.args.get("code"))
+        return redirect( INDEX_URI )
 
-    return response
-#    url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
-#    auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
-#    return redirect(auth_url)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        # Step 1. Display sign in link when no token
+        auth_url = auth_manager.get_authorize_url()
+        return f'<h2><a href="{auth_url}">Sign in</a></h2>'
 
-@app.route("/spotify/callback")
-def spotify_callback():
-    # Auth Step 4: Requests refresh and access tokens
-    code = request.args['code']
-
-    base64encoded = base64.b64encode(("{}:{}".format(CLIENT_ID, CLIENT_SECRET)).encode())
-    headers = {
-        'Authorization': "Basic {}".format(base64encoded.decode()),
-
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
-    body = {
-        "code": str(code),
-        "redirect_uri": REDIRECT_URI,
-        "grant_type": "authorization_code",
-    }
+    # Step 3. Signed in, display data
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
+    return f'<h2>Hi {spotify.me()["display_name"]}, ' \
+           f'<small><a href="/sign_out">[sign out]<a/></small></h2>' \
+           f'<a href="/playlists">my playlists</a> | ' \
+           f'<a href="/currently_playing">currently playing</a> | ' \
+        f'<a href="/current_user">me</a>' \
 
 
-    post_response = requests.post(SPOTIFY_TOKEN_URL, headers=headers, data=body)
 
-    if post_response.status_code == 200:
-        pr = post_response.json()
-        return str([pr['access_token'], pr['refresh_token'], pr['expires_in']])
-    else:
-#        logging.error('getToken:' + str(post_response.status_code))
-        error_message = "ERROR\n"
-#        error_message += str(headers) + str(body)
-        error_message += str(post_response.json())
-        return error_message
-    # Auth Step 5: Tokens are Returned to Application
-#    print(post_request)
-#    response_data = json.loads(post_request.text)
-#    access_token = response_data["access_token"]
-#    refresh_token = response_data["refresh_token"]
-#    token_type = response_data["token_type"]
-#    expires_in = response_data["expires_in"]
+@app.route( INDEX_URI + '/sign_out')
+def sign_out():
+    session.pop("token_info", None)
+    return redirect( INDEX_URI )
 
 
-    # Get profile data
-#    user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
-#    profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
-#    profile_data = json.loads(profile_response.text)
+@app.route( INDEX_URI + '/playlists')
+def playlists():
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect( INDEX_URI )
 
-    # Get user playlist data
-#    playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
-#    playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
-#    playlist_data = json.loads(playlists_response.text)
-
-    # Combine profile and playlist data to display
-#    display_arr = [profile_data] + playlist_data["items"]
-#    return render_template("index.html", sorted_array=display_arr)
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
+    return spotify.current_user_playlists()
 
 
-#example Medium article
-#@app.route("/spotify/authorize")
-#def spotify_authorize():
-#	client_id = app.config['CLIENT_ID']
-#	client_secret = app.config['CLIENT_SECRET']
-#	redirect_uri = app.config['REDIRECT_URI']
-#	scope = app.config['SCOPE']
-#
-#	# state key used to protect against cross-site forgery attacks
-#	state_key = createStateKey(15)
-#	session['state_key'] = state_key
-#
-#	# redirect user to Spotify authorization page
-#	authorize_url = 'https://accounts.spotify.com/en/authorize?'
-#	parameters = 'response_type=code&client_id=' + client_id + '&redirect_uri=' + redirect_uri + '&scope=' + scope + '&state=' + state_key
-#	response = make_response(redirect(authorize_url + parameters))
-#
-#	return response
+@app.route( INDEX_URI + '/currently_playing')
+def currently_playing():
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect( INDEX_URI )
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
+    track = spotify.current_user_playing_track()
+    if not track is None:
+        return track
+    return "No track currently playing."
 
 
-#@app.route("spotify/callback")
-#def spotify_callback():
-#	# make sure the response came from Spotify
-#	if request.args.get('state') != session['state_key']:
-#		return render_template('index.html', error='State failed.')
-#	if request.args.get('error'):
-#		return render_template('index.html', error='Spotify error.')
-#	else:
-#		code = request.args.get('code')
-#		session.pop('state_key', None)
-#
-#		# get access token to make requests on behalf of the user
-#		payload = getToken(code)
-#		if payload != None:
-#			session['token'] = payload[0]
-#			session['refresh_token'] = payload[1]
-#			session['token_expiration'] = time.time() + payload[2]
-#		else:
-#			return render_template('index.html', error='Failed to access token.')
-#
-#	current_user = getUserInformation(session)
-#	session['user_id'] = current_user['id']
-#	logging.info('new user:' + session['user_id'])
-#
-#	return redirect(session['previous_url'])
-
+@app.route( INDEX_URI + '/current_user')
+def current_user():
+    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect( INDEX_URI )
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
+    return spotify.current_user()
 
