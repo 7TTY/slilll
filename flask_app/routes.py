@@ -81,7 +81,7 @@ with open('/home/utterpop/slilll/flask_app/config.json') as config_file:
 
 CLIENT_ID = config.get('CLIENT_ID')
 CLIENT_SECRET = config.get('CLIENT_SECRET')
-
+REDIRECT_URI = 'http://173.230.144.62/spotify'
 
 
 Session(app)
@@ -95,6 +95,7 @@ def spotify_auth():
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
                                                 client_id= CLIENT_ID,
                                                 client_secret= CLIENT_SECRET,
+                                                redirect_uri= REDIRECT_URI,
                                                cache_handler=cache_handler,
                                                show_dialog=True)
 
