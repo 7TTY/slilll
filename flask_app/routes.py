@@ -69,13 +69,20 @@ Run app.py
 
 # deployment redirect uri --> http://173.230.144.62/spotify
 
-import os
 from flask import Flask, session, request, redirect
 from flask_session import Session
 import spotipy
 
 # already defined app before
 #app = Flask(__name__)
+
+with open('/home/utterpop/slilll/flask_app/config.json') as config_file:
+   config = json.load(config_file)
+
+CLIENT_ID = config.get('CLIENT_ID')
+CLIENT_SECRET = config.get('CLIENT_SECRET')
+
+
 
 Session(app)
 
@@ -86,8 +93,8 @@ def spotify_auth():
 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
-                                                client_id= app.config('CLIENT_ID'),
-                                                client_secret= app.config('CLIENT_SECRET'),
+                                                client_id= CLIENT_ID,
+                                                client_secret= CLIENT_SECRET,
                                                cache_handler=cache_handler,
                                                show_dialog=True)
 
