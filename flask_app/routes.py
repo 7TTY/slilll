@@ -72,6 +72,7 @@ Run app.py
 from flask import Flask, session, request, redirect
 from flask_session import Session
 import spotipy
+import os
 
 # already defined app before
 #app = Flask(__name__)
