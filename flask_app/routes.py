@@ -116,10 +116,10 @@ def spotify_auth():
     # Step 3. Signed in, display data
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     return f'<h2>Hi {spotify.me()["display_name"]}, ' \
-           f'<small><a href="/sign_out">[sign out]<a/></small></h2>' \
-           f'<a href="/playlists">my playlists</a> | ' \
-           f'<a href="/currently_playing">currently playing</a> | ' \
-        f'<a href="/current_user">me</a>' \
+           f'<small><a href="/spotify/sign_out">[sign out]<a/></small></h2>' \
+           f'<a href="/spotify/playlists">my playlists</a> | ' \
+           f'<a href="/spotify/currently_playing">currently playing</a> | ' \
+        f'<a href="/spotify/current_user">me</a>' \
 
 
 
