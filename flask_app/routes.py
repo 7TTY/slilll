@@ -83,6 +83,9 @@ CLIENT_ID = config.get('CLIENT_ID')
 CLIENT_SECRET = config.get('CLIENT_SECRET')
 REDIRECT_URI = 'http://173.230.144.62/spotify'
 
+app.config['SECRET_KEY'] = os.urandom(64)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = './.flask_session/'
 
 Session(app)
 
