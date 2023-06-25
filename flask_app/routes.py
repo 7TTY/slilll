@@ -77,10 +77,6 @@ import spotipy
 # already defined app before
 #app = Flask(__name__)
 
-
-app.config['SECRET_KEY'] = os.urandom(64)
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_FILE_DIR'] = './.flask_session/'
 Session(app)
 
 INDEX_URI = '/spotify'
@@ -90,6 +86,8 @@ def spotify_auth():
 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
+                                                client_id= app.config('CLIENT_ID'),
+                                                client_secret= app.config('CLIENT_SECRET'),
                                                cache_handler=cache_handler,
                                                show_dialog=True)
 
