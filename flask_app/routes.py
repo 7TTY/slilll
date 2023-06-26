@@ -99,8 +99,7 @@ def spotify_auth():
         get_access_token=True,
         scope='user-read-currently-playing playlist-modify-private'
     )
-   
-'user-read-currently-playing playlist-modify-private'
+    
     if request.args.get("code"):
         # Step 2. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
