@@ -165,7 +165,7 @@ def current_user():
 def get_auth_manager(get_access_token=False, scope=None):
 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
-    if init_code:
+    if get_access_token:
         auth_manager = spotipy.oauth2.SpotifyOAuth(
             scope=scope,
             client_id= CLIENT_ID,
