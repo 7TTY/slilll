@@ -7,3 +7,4 @@ gunicorn
 wheel
 requests
 pyyaml
+spotipy
