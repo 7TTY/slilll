@@ -76,7 +76,7 @@ def spotify_test_home():
 
 
 # @app.route( INDEX_URI )
-def spotify_auth(scope):
+def spotify_auth(request, scope):
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
         scope=scope,
@@ -120,7 +120,7 @@ def playlists():
 #
 #    spotify = spotipy.Spotify(auth_manager=auth_manager)
     scope = 'playlist-modify-private'
-    spotify = spotify_auth(scope)
+    spotify = spotify_auth(request, scope)
     return spotify.current_user_playlists()
 
 @app.route( INDEX_URI + '/current_user')
@@ -132,7 +132,7 @@ def current_user():
 #        return redirect( INDEX_URI )
 #    spotify = spotipy.Spotify(auth_manager=auth_manager)
     scope = 'user-read-currently-playing'
-    spotify = spotify_auth(scope)
+    spotify = spotify_auth(request, scope)
     return spotify.current_user()
 
 
