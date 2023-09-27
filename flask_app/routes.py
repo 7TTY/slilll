@@ -77,8 +77,6 @@ def spotify_test_home():
 
 # @app.route( INDEX_URI )
 def spotify_auth(scope):
-
-#     scope='user-read-currently-playing playlist-modify-private'
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
         scope=scope,
