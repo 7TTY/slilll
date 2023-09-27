@@ -137,15 +137,15 @@ def sign_out():
 @app.route( INDEX_URI + '/playlists')
 def playlists():
     
-    scope = 'playlist-modify-private'
+#    scope = 'playlist-modify-private'
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
-        scope=scope,
+#        scope=scope,
         client_id= CLIENT_ID,
         client_secret= CLIENT_SECRET,
         redirect_uri= REDIRECT_URI,
         cache_handler=cache_handler,
-        show_dialog=True
+#        show_dialog=True
     )
 
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
@@ -158,15 +158,15 @@ def playlists():
 @app.route( INDEX_URI + '/current_user')
 def current_user():
     
-    scope = 'playlist-modify-private'
+#    scope = 'playlist-modify-private'
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
-        scope=scope,
+#        scope=scope,
         client_id= CLIENT_ID,
         client_secret= CLIENT_SECRET,
         redirect_uri= REDIRECT_URI,
         cache_handler=cache_handler,
-        show_dialog=True
+#        show_dialog=True
     )
 
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
