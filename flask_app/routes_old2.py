@@ -67,7 +67,7 @@ app.config['SESSION_FILE_DIR'] = './.flask_session/'
 # cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
 Session(app)
 
-INDEX_URI = '/spotify_test'
+INDEX_URI = '/spotify'
 
 # @app.route( INDEX_URI )
 # def spotify_test_home():
