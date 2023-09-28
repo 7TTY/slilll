@@ -92,7 +92,9 @@ def __session_prep(scope):
 @app.route( INDEX_URI )
 def spotify_redirect_uri():
     
-    cache_handler, auth_manager = __session_prep(scope = 'user-read-currently-playing', show_dialog = True)
+    #scope = 'user-read-currently-playing'
+    scope = None
+    cache_handler, auth_manager = __session_prep(scope=scope)
     if request.args.get("code"):
         # Step 2. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
@@ -108,7 +110,8 @@ def spotify_redirect_uri():
 
 
 @app.route( INDEX_URI + '/sign-in' )
-def spotify_signin():
+def spotify_sign_in():
+    
     #scope = 'user-read-currently-playing'
     scope = None
     cache_handler, auth_manager = __session_prep(scope=scope)
@@ -121,7 +124,7 @@ def spotify_signin():
 
 
 @app.route( INDEX_URI + '/sign-out')
-def sign_out():
+def spotify_sign_out():
     session.pop("token_info", None)
     return redirect( INDEX_URI )
 
