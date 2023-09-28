@@ -69,10 +69,10 @@ Session(app)
 
 INDEX_URI = '/spotify'
 
-# @app.route( INDEX_URI )
-# def spotify_test_home():
-#    return f'<a href="{ INDEX_URI }/playlists">my playlists</a> | ' \
-#           f'<a href="{ INDEX_URI }/current_user">me</a>'
+@app.route( INDEX_URI )
+def spotify_test_home():
+    return f'<a href="{ INDEX_URI }/playlists">my playlists</a> | ' \
+            f'<a href="{ INDEX_URI }/current_user">me</a>'
 
 
 # @app.route( INDEX_URI )
