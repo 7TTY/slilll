@@ -71,10 +71,13 @@ INDEX_URI = '/spotify'
 
 # considering adding scope as variable to session dict? can i do that?
 
-
+session['spotify_scope'] = None
 
 # @app.route( INDEX_URI )
-def __session_prep(scope):
+def __session_prep():
+    
+    scope = session['spotify_scope']
+
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
         scope=scope,
@@ -93,8 +96,10 @@ def __session_prep(scope):
 def spotify_redirect_uri():
     
     #scope = 'user-read-currently-playing'
-    scope = None
-    cache_handler, auth_manager = __session_prep(scope=scope)
+    #scope = None
+    #cache_handler, auth_manager = __session_prep(scope=scope)
+    # session['spotify_scope'] = 
+    cache_handler, auth_manager = __session_prep()
     if request.args.get("code"):
         # Step 2. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
@@ -113,8 +118,8 @@ def spotify_redirect_uri():
 def spotify_sign_in():
     
     #scope = 'user-read-currently-playing'
-    scope = None
-    cache_handler, auth_manager = __session_prep(scope=scope)
+    #scope = None
+    cache_handler, auth_manager = __session_prep()
     if auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect( INDEX_URI )
     else:
@@ -126,6 +131,7 @@ def spotify_sign_in():
 @app.route( INDEX_URI + '/sign-out')
 def spotify_sign_out():
     session.pop("token_info", None)
+    session['scope'] = None
     return redirect( INDEX_URI )
 
 
@@ -133,8 +139,9 @@ def spotify_sign_out():
 @app.route( INDEX_URI + '/playlists')
 def playlists():
     
-    scope = 'user-read-currently-playing'
-    cache_handler, auth_manager = __session_prep(scope=scope)
+    #scope = 'user-read-currently-playing'
+    session['scope'] = 'user-read-currently-playing'
+    cache_handler, auth_manager = __session_prep()
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect( INDEX_URI + '/sign-in' )
 
@@ -144,8 +151,9 @@ def playlists():
 @app.route( INDEX_URI + '/current-user')
 def current_user():
     
-    scope = 'user-read-currently-playing'
-    cache_handler, auth_manager = __session_prep(scope=scope)
+    #scope = 'user-read-currently-playing'
+    session['scope'] = 'user-read-currently-playing'
+    cache_handler, auth_manager = __session_prep()
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect( INDEX_URI + '/sign-in' )
     
