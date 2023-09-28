@@ -82,7 +82,7 @@ def __session_prep(scope, show_dialog):
         client_secret= CLIENT_SECRET,
         redirect_uri= REDIRECT_URI,
         cache_handler=cache_handler,
-        show_dialog=show_dialog
+        show_dialog=True
     )
     return cache_handler, auth_manager
 
@@ -109,7 +109,9 @@ def spotify_redirect_uri():
 
 @app.route( INDEX_URI + '/sign-in' )
 def spotify_signin():
-    cache_handler, auth_manager = __session_prep(scope = 'user-read-currently-playing', show_dialog = True)
+    #scope = 'user-read-currently-playing'
+    scope = None
+    cache_handler, auth_manager = __session_prep(scope=scope)
     if auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect( INDEX_URI )
     else:
@@ -128,18 +130,9 @@ def sign_out():
 @app.route( INDEX_URI + '/playlists')
 def playlists():
     
-#    cache_handler, auth_manager = use_access_token()
-#    
-#    if not auth_manager.validate_token(cache_handler.get_cached_token()):
-#        return redirect( INDEX_URI )
-#
-#    spotify = spotipy.Spotify(auth_manager=auth_manager)
-    cache_handler, auth_manager = __session_prep(
-        scope = 'user-read-currently-playing',
-        show_dialog = True
-    )
+    scope = 'user-read-currently-playing'
+    cache_handler, auth_manager = __session_prep(scope=scope)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
-        # Step 1. Display sign in link when no token
         return redirect( INDEX_URI + '/sign-in' )
 
     spotify = spotipy.Spotify(auth_manager=auth_manager)
@@ -148,34 +141,11 @@ def playlists():
 @app.route( INDEX_URI + '/current-user')
 def current_user():
     
-#    cache_handler, auth_manager = use_access_token()
-    
-#    if not auth_manager.validate_token(cache_handler.get_cached_token()):
-#        return redirect( INDEX_URI )
-#    spotify = spotipy.Spotify(auth_manager=auth_manager)
-
-    cache_handler, auth_manager = __session_prep(
-        scope = 'user-read-currently-playing',
-        show_dialog = True
-    )
+    scope = 'user-read-currently-playing'
+    cache_handler, auth_manager = __session_prep(scope=scope)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
-        # Step 1. Display sign in link when no token
         return redirect( INDEX_URI + '/sign-in' )
     
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     return spotify.current_user()
 
-
-
-
-#def use_access_token():
-
-#    cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
-#    auth_manager = spotipy.oauth2.SpotifyOAuth(
-#        client_id= CLIENT_ID,
-#        client_secret= CLIENT_SECRET,
-#        redirect_uri= REDIRECT_URI,
-#        cache_handler=cache_handler
-#    )
-
-#    return cache_handler, auth_manager
