@@ -71,12 +71,11 @@ INDEX_URI = '/spotify'
 
 # considering adding scope as variable to session dict? can i do that?
 
-session['spotify_scope'] = None
 
 # @app.route( INDEX_URI )
 def __session_prep():
     
-    scope = session['spotify_scope']
+    scope = session.get('spotify_scope', None)
 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
@@ -131,7 +130,7 @@ def spotify_sign_in():
 @app.route( INDEX_URI + '/sign-out')
 def spotify_sign_out():
     session.pop("token_info", None)
-    session['scope'] = None
+    session.pop('scope', None) 
     return redirect( INDEX_URI )
 
 
@@ -140,7 +139,7 @@ def spotify_sign_out():
 def playlists():
     
     #scope = 'user-read-currently-playing'
-    session['scope'] = 'user-read-currently-playing'
+    session['spotify_scope'] = 'user-read-currently-playing'
     cache_handler, auth_manager = __session_prep()
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect( INDEX_URI + '/sign-in' )
@@ -152,7 +151,7 @@ def playlists():
 def current_user():
     
     #scope = 'user-read-currently-playing'
-    session['scope'] = 'user-read-currently-playing'
+    session['spotify_scope'] = 'user-read-currently-playing'
     cache_handler, auth_manager = __session_prep()
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         return redirect( INDEX_URI + '/sign-in' )
