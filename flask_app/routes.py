@@ -135,7 +135,7 @@ def playlists():
 #
 #    spotify = spotipy.Spotify(auth_manager=auth_manager)
     cache_handler, auth_manager = __session_prep(
-        scope = 'playlist-modify-private',
+        scope = 'user-read-currently-playing',
         show_dialog = True
     )
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
