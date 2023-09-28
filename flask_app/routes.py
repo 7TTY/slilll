@@ -74,7 +74,7 @@ INDEX_URI = '/spotify'
 
 
 # @app.route( INDEX_URI )
-def __session_prep(scope, show_dialog):
+def __session_prep(scope):
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
         scope=scope,
