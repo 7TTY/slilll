@@ -69,14 +69,12 @@ Session(app)
 
 INDEX_URI = '/spotify'
 
-@app.route( INDEX_URI )
-def spotify_test_home():
-    return f'<a href="{ INDEX_URI }/playlists">my playlists</a> | ' \
-            f'<a href="{ INDEX_URI }/current_user">me</a>'
+# considering adding scope as variable to session dict? can i do that?
+
 
 
 # @app.route( INDEX_URI )
-def spotify_auth(request, scope):
+def __session_prep(scope, show_dialog):
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(
         scope=scope,
@@ -84,26 +82,43 @@ def spotify_auth(request, scope):
         client_secret= CLIENT_SECRET,
         redirect_uri= REDIRECT_URI,
         cache_handler=cache_handler,
-        show_dialog=True
+        show_dialog=show_dialog
     )
+    return cache_handler, auth_manager
 
+# show dialog True when loggin in, otherwise False ??
+
+
+@app.route( INDEX_URI )
+def spotify_redirect_uri():
+    
+    cache_handler, auth_manager = __session_prep(scope = 'user-read-currently-playing', show_dialog = True)
     if request.args.get("code"):
         # Step 2. Being redirected from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
-        return redirect( INDEX_URI )
-
+        return redirect( INDEX_URI )    
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
         # Step 1. Display sign in link when no token
+        return redirect( INDEX_URI + '/sign-in' )
+
+    return f'<a href="{ INDEX_URI }/playlists">my playlists</a> | ' \
+            f'<a href="{ INDEX_URI }/current-user">me</a>' \
+            f'<a href="{ INDEX_URI }/sign-out">me</a>'
+
+
+
+@app.route( INDEX_URI + '/sign-in' )
+def spotify_signin():
+    cache_handler, auth_manager = __session_prep(scope = 'user-read-currently-playing', show_dialog = True)
+    if auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect( INDEX_URI )
+    else:
         auth_url = auth_manager.get_authorize_url()
-        return f'<h2><a href="{auth_url}">Sign in</a></h2>'
-
-    # Step 3. Signed in, display data
-    spotify = spotipy.Spotify(auth_manager=auth_manager)
-    return spotify
+        return f'<h2><a href="{auth_url}">Sign in</a></h2>'       
 
 
 
-@app.route( INDEX_URI + '/sign_out')
+@app.route( INDEX_URI + '/signout')
 def sign_out():
     session.pop("token_info", None)
     return redirect( INDEX_URI )
@@ -119,11 +134,18 @@ def playlists():
 #        return redirect( INDEX_URI )
 #
 #    spotify = spotipy.Spotify(auth_manager=auth_manager)
-    scope = 'playlist-modify-private'
-    spotify = spotify_auth(request, scope)
+    cache_handler, auth_manager = __session_prep(
+        scope = 'playlist-modify-private',
+        show_dialog = True
+    )
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        # Step 1. Display sign in link when no token
+        return redirect( INDEX_URI + '/sign-in' )
+
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
     return spotify.current_user_playlists()
 
-@app.route( INDEX_URI + '/current_user')
+@app.route( INDEX_URI + '/current-user')
 def current_user():
     
 #    cache_handler, auth_manager = use_access_token()
@@ -131,8 +153,16 @@ def current_user():
 #    if not auth_manager.validate_token(cache_handler.get_cached_token()):
 #        return redirect( INDEX_URI )
 #    spotify = spotipy.Spotify(auth_manager=auth_manager)
-    scope = 'user-read-currently-playing'
-    spotify = spotify_auth(request, scope)
+
+    cache_handler, auth_manager = __session_prep(
+        scope = 'user-read-currently-playing',
+        show_dialog = True
+    )
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        # Step 1. Display sign in link when no token
+        return redirect( INDEX_URI + '/sign-in' )
+    
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
     return spotify.current_user()
 
 
