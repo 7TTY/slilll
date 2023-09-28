@@ -102,8 +102,8 @@ def spotify_redirect_uri():
         return redirect( INDEX_URI + '/sign-in' )
 
     return f'<a href="{ INDEX_URI }/playlists">my playlists</a> | ' \
-            f'<a href="{ INDEX_URI }/current-user">me</a>' \
-            f'<a href="{ INDEX_URI }/sign-out">me</a>'
+            f'<a href="{ INDEX_URI }/current-user">me</a> | ' \
+            f'<a href="{ INDEX_URI }/sign-out">sign-out</a>'
 
 
 
