@@ -118,7 +118,7 @@ def spotify_signin():
 
 
 
-@app.route( INDEX_URI + '/signout')
+@app.route( INDEX_URI + '/sign-out')
 def sign_out():
     session.pop("token_info", None)
     return redirect( INDEX_URI )
